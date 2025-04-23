@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, ScrollView, Button, Alert } from 'react-native';
+import {
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+  View,
+  Text,
+  Button,
+  Alert
+} from 'react-native';
 import { Formik } from 'formik';
 import InputWithLabel from './components/InputWithLabel';
 
@@ -20,14 +28,16 @@ export default function App() {
         Alert.alert('Form submitted!', JSON.stringify(values, null, 2));
       }}
     >
-      {({
-        handleChange,
-        handleSubmit,
-        values,
-      }) => (
-        <View style={{ flex: 1, padding: 15, paddingTop: 30, backgroundColor: '#ecf0f1' }}>
-          <ScrollView>
-
+      {({ handleChange, handleSubmit, values }) => (
+        <KeyboardAvoidingView
+          style={{ flex: 1, backgroundColor: '#ecf0f1' }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ padding: 15, paddingTop: 30 }}
+          >
             <Text style={{ padding: 8, fontSize: 20 }}>Account Info</Text>
 
             <InputWithLabel
@@ -86,9 +96,8 @@ export default function App() {
             <View style={{ marginTop: 30, marginHorizontal: 15 }}>
               <Button title="Submit" onPress={handleSubmit} />
             </View>
-
           </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
       )}
     </Formik>
   );
